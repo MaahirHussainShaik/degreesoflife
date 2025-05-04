@@ -33,9 +33,9 @@
             left: 0;
             width: 100%;
             height: 200px; /* Adjust height as needed */
-            background-color: #1A3C34; /* Dark teal to represent a skyline */
-            /* Alternative: Use a gradient for a more realistic skyline effect */
-            /* background: linear-gradient(to top, #1A3C34, #4682B4); */
+            background-image: url('skyline.png'); /* Replace with your skyline image */
+            background-repeat: repeat-x;
+            background-size: auto 100%;
             opacity: 0; /* Initially hidden */
         }
 
@@ -70,7 +70,7 @@
             position: relative;
             border-radius: 10px;
             box-shadow: 0 0 10px rgba(0, 0, 0, 0.3);
-            overflow: visible; /* Ensure narration boxes aren't clipped */
+            overflow: hidden;
             display: flex;
             align-items: center;
             justify-content: center;
@@ -79,6 +79,7 @@
 
         .grid-item-full {
             grid-column: 1 / -1;
+            max-width: 800px;
         }
 
         .grid-item-sidebyside {
@@ -118,7 +119,7 @@
             border-radius: 15px;
             font-size: 1.1rem;
             text-align: center;
-            z-index: 10; /* Ensure narration box is above other elements */
+            z-index: 1;
             white-space: nowrap;
             box-shadow: 2px 2px 5px rgba(0, 0, 0, 0.2);
         }
@@ -128,13 +129,6 @@
         .narration-box-right {
             max-width: 90%; /* Ensure text doesn't overflow */
             white-space: normal; /* Allow text wrapping for longer narration */
-            z-index: 10; /* Ensure visibility */
-        }
-
-        /* Temporary fallback to force visibility for debugging */
-        .narration-box-left {
-            opacity: 1 !important;
-            visibility: visible !important;
         }
 
         .audio-toggle {
@@ -225,47 +219,48 @@
         <div class="grid-item grid-item-sidebyside2">
             <div class="grid-item">
                 <div class="narration-box narration-box-left">The city of Auckland, where dreams come true, but there's still time for him...</div>
-                <img src="asset/AuckTower.jpg" alt="The Auckland Tower." loading="lazy">
+                <img src="assets/AuckTower.jpg" alt="The Auckland Tower." loading="lazy">
             </div>
             <div class="grid-item">
                 <div class="narration-box narration-box-right">New Plymouth, the place where his new life was about to begin as he enters the uncharted lands...</div>
-                <img src="asset/egmount.jpg" alt="Mt. Taranaki/Egmont with snow." loading="lazy">
+                <img src="assets/egmount.jpg" alt="Mt. Taranaki/Egmont with snow." loading="lazy">
             </div>
         </div>
 
         <div class="grid-item grid-item-full">
             <div class="narration-box">Surrounded by Mountains one side, and shining shimmering seas on the other, he slowly gazes as the sun sets low,</div>
-            <img src="asset/sea.jpg" alt="A starry night sky." loading="lazy">
+            <img src="assets/sea.jpg" alt="A starry night sky." loading="lazy">
         </div>
 
         <div class="grid-item grid-item-sidebyside2">
             <div class="grid-item interactive-section">
                 <div class="narration-box narration-box-left">2 months later...Covid hit him hard, he was all alone wandering into the unknown</div>
-                <img src="asset/StarringOutside.jpg" alt="A cartoon bedroom at night with rain." loading="lazy">
+                <img src="assets/StarringOutside.jpg" alt="A cartoon bedroom at night with rain." loading="lazy">
             </div>
             <div class="grid-item">
                 <div class="narration-box narration-box-right">The Phone rings...A Phone call that brought a smile onto his face...</div>
-                <img src="asset/Phone.jpg" alt="A cartoon dance party." loading="lazy">
+                <img src="assets/Phone.jpg" alt="A cartoon dance party." loading="lazy">
             </div>
         </div>
 
         <div class="grid-item grid-item-sidebyside">
             <div class="grid-item">
                 <div class="narration-box narration-box-left">A month later, the prom night, where he took his partner someplace special...</div>
-                <img src="asset/rocky-shore-full-moon.jpg" alt="A cartoon bedroom at night with rain." loading="lazy">
+                <img src="assets/rocky-shore-full-moon.jpg" alt="A cartoon bedroom at night with rain." loading="lazy">
             </div>
             <div class="grid-item" style="position: relative;">
                 <div class="narration-box narration-box-right">The Perfect Dance... where he held his partner, as they danced all night... as the song played on his phone... Press the button to embrace Maahir's dance</div>
-                <img src="asset/Prom.jpg" alt="A cartoon dance party." loading="lazy">
+                <img src="assets/Prom.jpg" alt="A cartoon dance party." loading="lazy">
                 <button class="audio-toggle" onclick="toggleAudio()">Play Music</button>
             </div>
         </div>
 
         <div class="grid-item grid-item-full">
-            <div class="narration-box">The Final question...Finally the day comes, as he walks into the 2degrees building...for an interview...2degrees...his dream company<br> knowingly or unknowingly...it has been a huge part of his life...whether it be connecting with his loved ones or helping him cope with his emptiness, loneliness...Is he selected or not...</div>
-            <img src="asset/walkIntoCom.jpg" alt="A person walking into a 2degrees building." loading="lazy">
+            <div class="narration-box">The Final question...Finally the day comes, as he walks into the 2degrees building...for an interview...2degrees...his dream company, knowingly or unknowingly...it has been a huge part of his life...whether it be connecting with his loved ones or helping him cope with his emptiness, loneliness...Is he selected or not...</div>
+            <img src="assets/walkIntoCom.jpg" alt="A person walking into a 2degrees building." loading="lazy">
         </div>
     </div>
+
 
     <script>
         gsap.registerPlugin(ScrollTrigger);
@@ -281,16 +276,10 @@
         });
 
         // Animate each grid item and its narration box/content
-        document.querySelectorAll('.grid-item').forEach((item, index) => {
+        document.querySelectorAll('.grid-item').forEach(item => {
+            // Select narration box and content within this specific grid item
             const narrationBox = item.querySelector('.narration-box');
             const contentElements = item.querySelectorAll('.content');
-
-            // Debug: Log to check if narration box is found
-            if (narrationBox) {
-                console.log(`Narration box found for grid-item ${index}:`, narrationBox.textContent);
-            } else {
-                console.log(`No narration box found for grid-item ${index}`);
-            }
 
             // Animate narration box if it exists
             if (narrationBox) {
@@ -300,13 +289,9 @@
                     duration: 0.6,
                     scrollTrigger: {
                         trigger: item,
-                        start: 'top 98%', // Adjusted to trigger even earlier
-                        end: 'bottom 2%',
-                        toggleActions: 'play none none reverse',
-                        onEnter: () => console.log(`Narration box ${index} enter`),
-                        onLeave: () => console.log(`Narration box ${index} leave`),
-                        onEnterBack: () => console.log(`Narration box ${index} enter back`),
-                        onLeaveBack: () => console.log(`Narration box ${index} leave back`)
+                        start: 'top 80%',
+                        end: 'bottom 20%',
+                        toggleActions: 'play none none reverse'
                     }
                 });
                 gsap.from(narrationBox, {
@@ -316,8 +301,8 @@
                     ease: 'back.out(1.7)',
                     scrollTrigger: {
                         trigger: item,
-                        start: 'top 98%',
-                        end: 'bottom 2%',
+                        start: 'top 80%',
+                        end: 'bottom 20%',
                         toggleActions: 'play none none reverse'
                     }
                 });
@@ -332,8 +317,8 @@
                     stagger: 0.15,
                     scrollTrigger: {
                         trigger: item,
-                        start: 'top 98%',
-                        end: 'bottom 2%',
+                        start: 'top 80%',
+                        end: 'bottom 20%',
                         toggleActions: 'play none none reverse'
                     }
                 });
@@ -344,8 +329,8 @@
                     ease: 'back.out(1.7)',
                     scrollTrigger: {
                         trigger: item,
-                        start: 'top 98%',
-                        end: 'bottom 2%',
+                        start: 'top 80%',
+                        end: 'bottom 20%',
                         toggleActions: 'play none none reverse'
                     }
                 });
@@ -367,7 +352,7 @@
 
             // Interactive skill list overlay for "Job Hunt Begins"
             const skillListOverlay = item.querySelector('.skill-list-overlay');
-            const jobHuntSection = item.closest('.interactive-section');
+            const jobHuntSection = item.closest('.interactive-section'); // Target the correct section
 
             if (jobHuntSection && skillListOverlay) {
                 jobHuntSection.addEventListener('mouseenter', () => {
@@ -384,9 +369,7 @@
             const audio = document.getElementById('prom-music');
             const button = document.querySelector('.audio-toggle');
             if (audio.paused) {
-                audio.play().catch(error => {
-                    console.error("Audio playback failed:", error);
-                });
+                audio.play();
                 button.textContent = 'Pause Music';
             } else {
                 audio.pause();
