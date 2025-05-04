@@ -1,10 +1,9 @@
 <!DOCTYPE html>
 <html lang="en">
-
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Degrees of Maahir's Life</title>
+    <title>Maahir's Journey with 2degrees</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/gsap.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/ScrollTrigger.min.js"></script>
@@ -13,11 +12,11 @@
         body {
             margin: 0;
             font-family: 'Bangers', cursive;
-            background-color: #2BC0E4; /* Initial background color */
-            overflow-x: hidden; /* Prevent horizontal scrollbar */
+            background-color: #2BC0E4;
+            overflow-x: hidden;
         }
 
-        .start-page {
+        .hero, .start-page {
             height: 100vh;
             display: flex;
             flex-direction: column;
@@ -25,6 +24,7 @@
             justify-content: center;
             text-align: center;
             color: white;
+            position: relative;
         }
 
         .skyline {
@@ -32,11 +32,11 @@
             bottom: 0;
             left: 0;
             width: 100%;
-            height: 200px; /* Adjust height as needed */
-            background-image: url('skyline.png'); /* Replace with your skyline image */
+            height: 200px;
+            background-image: url('skyline.png');
             background-repeat: repeat-x;
             background-size: auto 100%;
-            opacity: 0; /* Initially hidden */
+            opacity: 0;
         }
 
         .start-title {
@@ -55,15 +55,20 @@
             font-size: 1.2rem;
             opacity: 0;
             cursor: pointer;
+            transition: opacity 0.3s;
         }
 
-        .image-grid {
+        .scroll-down:hover {
+            opacity: 0.8;
+        }
+
+        .image-grid, .grid-container {
             display: grid;
             grid-template-columns: 1fr;
-            gap: 10px;
-            padding: 10px;
-            margin-top: 100vh; /* Push it down below the start page */
-            background-color: #f0f0f0; /* Background for the rest of the page */
+            gap: 20px;
+            padding: 20px;
+            margin-top: 100vh;
+            background-color: #f0f0f0;
         }
 
         .grid-item {
@@ -79,7 +84,6 @@
 
         .grid-item-full {
             grid-column: 1 / -1;
-            max-width: 800px;
         }
 
         .grid-item-sidebyside {
@@ -94,9 +98,17 @@
             gap: 10px;
         }
 
+        .grid-item-sidebyside3 {
+            display: grid;
+            grid-template-columns: repeat(3, 33.33%);
+            gap: 10px;
+        }
+
         .grid-item-sidebyside .grid-item,
-        .grid-item-sidebyside2 .grid-item {
+        .grid-item-sidebyside2 .grid-item,
+        .grid-item-sidebyside3 .grid-item {
             min-height: 350px;
+            position: relative;
         }
 
         .grid-item img {
@@ -110,25 +122,22 @@
         .narration-box {
             position: absolute;
             top: 10px;
-            left: 50%;
-            transform: translateX(-50%);
+            left: 10px;
+            transform: none;
             background-color: #fff;
             color: #000;
-            padding: 8px 15px;
+            padding: 0.4rem 0.8rem;
             border: 2px solid #000;
-            border-radius: 15px;
-            font-size: 1.1rem;
-            text-align: center;
-            z-index: 1;
-            white-space: nowrap;
+            border-radius: 0.8rem;
+            font-size: calc(0.8rem + 0.3vw);
+            text-align: left;
+            z-index: 2;
+            max-width: 50%;
+            min-width: 150px;
+            max-height: 20%;
+            overflow-y: auto;
             box-shadow: 2px 2px 5px rgba(0, 0, 0, 0.2);
-        }
-
-        /* Adjust positioning for side-by-side narration boxes */
-        .narration-box-left,
-        .narration-box-right {
-            max-width: 90%; /* Ensure text doesn't overflow */
-            white-space: normal; /* Allow text wrapping for longer narration */
+            word-wrap: break-word;
         }
 
         .audio-toggle {
@@ -144,6 +153,11 @@
             left: 50%;
             transform: translateX(-50%);
             z-index: 3;
+            transition: background-color 0.3s;
+        }
+
+        .audio-toggle:hover {
+            background-color: #c20510;
         }
 
         .content {
@@ -178,11 +192,13 @@
             padding: 20px 0;
             font-size: 0.9rem;
             color: #555;
+            background-color: #f0f0f0;
         }
 
         @media (max-width: 768px) {
             .grid-item-sidebyside,
-            .grid-item-sidebyside2 {
+            .grid-item-sidebyside2,
+            .grid-item-sidebyside3 {
                 grid-template-columns: 1fr;
             }
 
@@ -191,109 +207,149 @@
             }
 
             .narration-box {
-                font-size: 0.9rem; /* Slightly smaller font on mobile */
-                padding: 6px 12px;
-                white-space: normal; /* Ensure text wraps on smaller screens */
+                font-size: calc(0.7rem + 0.3vw);
+                padding: 0.3rem 0.6rem;
+                border-radius: 0.6rem;
+                max-height: 15%;
+                max-width: 70%;
+                left: 5px;
+            }
+
+            .grid-item,
+            .grid-item-sidebyside .grid-item,
+            .grid-item-sidebyside2 .grid-item,
+            .grid-item-sidebyside3 .grid-item {
+                min-height: 300px;
+            }
+        }
+
+        @media (max-width: 480px) {
+            .narration-box {
+                font-size: calc(0.6rem + 0.3vw);
+                padding: 0.2rem 0.5rem;
+                border-radius: 0.5rem;
+                max-width: 60%;
+                min-width: 120px;
+                max-height: 12%;
+                left: 5px;
             }
         }
     </style>
 </head>
-
 <body>
-    <div class="start-page">
-        <h1 class="start-title">Degrees of Maahir's Life</h1>
+    <section class="hero start-page">
+        <div class="start-title">Maahir's Journey with 2degrees</div>
         <div class="skyline"></div>
-        <div class="scroll-down">Scroll Down to Begin</div>
-    </div>
+        <div class="scroll-down" role="button" aria-label="Scroll down to begin">Scroll Down to Experience the Journey</div>
+    </section>
 
     <audio id="prom-music" loop>
         <source src="assets/Ed Sheeran - Perfect [TubeRipper.com].mp3" type="audio/mpeg">
+        Your browser does not support the audio element.
     </audio>
 
-    <div class="image-grid">
-        <div class="grid-item grid-item-full">
-            <div class="narration-box">Day 1 in the Unknown land, far far from family and friends for the greater good. Auckland, New Zealand</div>
-            <img src="assets/PlanePeek.png" alt="A young man on a plane looking at Auckland." loading="lazy">
+    <div class="image-grid grid-container">
+        <div class="grid-item grid-item-sidebyside2">
+            <div class="grid-item" style="background-color: #EAECC6;">
+                <div class="narration-box">I left behind everything I knew—family, friends—and stepped into the unknown. Day 1 in Auckland, New Zealand, began with hope in my heart.</div>
+                <img src="assets/PlanePeek.png" alt="Plane peeking" loading="lazy">
+            </div>
+            <div class="grid-item" style="background-color: skyblue">
+                <div class="narration-box">Finding a 2degrees store gave me a way to stay connected, easing the distance with every call.</div>
+                <img src="assets/store.jpg" alt="2degrees store" loading="lazy">
+            </div>
+        </div>
+
+        <div class="grid-item grid-item-sidebyside3">
+            <div class="grid-item" style="background-color: #F87060;">
+                <div class="narration-box">Homesickness lingered beneath Auckland’s iconic Sky Tower, but staying connected kept my loved ones close despite the miles.</div>
+                <img src="assets/AuckTower.jpg" alt="Sky Tower in Auckland" loading="lazy">
+            </div>
+            <div class="grid-item">
+                <div class="narration-box">In New Plymouth, my future took shape under Mt. Taranaki’s gaze, with a quiet strength supporting me through the newness.</div>
+                <img src="assets/egmount.jpg" alt="Snow-covered Mt. Taranaki/Egmont" loading="lazy">
+            </div>
+            <div class="grid-item">
+                <div class="narration-box">Late-night study sessions and early lectures defined my student life—having reliable connection made it all a bit easier.</div>
+                <img src="assets/School.jpg" alt="Student Life" loading="lazy">
+            </div>
         </div>
 
         <div class="grid-item grid-item-sidebyside2">
             <div class="grid-item">
-                <div class="narration-box narration-box-left">The city of Auckland, where dreams come true, but there's still time for him...</div>
-                <img src="assets/AuckTower.jpg" alt="The Auckland Tower." loading="lazy">
+                <div class="narration-box">Two months in, Covid struck like a storm, leaving me alone, staring into the rainy unknown, my heart aching for connection.</div>
+                <img src="assets/StarringOutside.jpg" alt="A person looking out a window during a rainy night" loading="lazy">
             </div>
             <div class="grid-item">
-                <div class="narration-box narration-box-right">New Plymouth, the place where his new life was about to begin as he enters the uncharted lands...</div>
-                <img src="assets/egmount.jpg" alt="Mt. Taranaki/Egmont with snow." loading="lazy">
-            </div>
-        </div>
-
-        <div class="grid-item grid-item-full">
-            <div class="narration-box">Surrounded by Mountains one side, and shining shimmering seas on the other, he slowly gazes as the sun sets low,</div>
-            <img src="assets/sea.jpg" alt="A starry night sky." loading="lazy">
-        </div>
-
-        <div class="grid-item grid-item-sidebyside2">
-            <div class="grid-item interactive-section">
-                <div class="narration-box narration-box-left">2 months later...Covid hit him hard, he was all alone wandering into the unknown</div>
-                <img src="assets/StarringOutside.jpg" alt="A cartoon bedroom at night with rain." loading="lazy">
-            </div>
-            <div class="grid-item">
-                <div class="narration-box narration-box-right">The Phone rings...A Phone call that brought a smile onto his face...</div>
-                <img src="assets/Phone.jpg" alt="A cartoon dance party." loading="lazy">
+                <div class="narration-box">A phone call broke the silence, bringing a burst of joy and love from afar—connection made it possible.</div>
+                <img src="assets/Phone.jpg" alt="A person receiving a joyful phone call" loading="lazy">
             </div>
         </div>
 
         <div class="grid-item grid-item-sidebyside">
             <div class="grid-item">
-                <div class="narration-box narration-box-left">A month later, the prom night, where he took his partner someplace special...</div>
-                <img src="assets/rocky-shore-full-moon.jpg" alt="A cartoon bedroom at night with rain." loading="lazy">
+                <div class="narration-box">A month later, prom night arrived—I whisked my partner to a special spot, our hearts beating as one under the full moon’s glow.</div>
+                <img src="assets/rocky-shore-full-moon.jpg" alt="A romantic rocky shore under a full moon" loading="lazy">
+            </div>
+            <div class="grid-item" style="background-color: #1F1C2C;">
+                <div class="narration-box">The Perfect Dance unfolded—we twirled all night to that song, a memory etched in joy, made even sweeter knowing I could share it with family far away. Press the button to relive it!</div>
+                <img src="assets/Prom.jpg" alt="A couple dancing at prom" loading="lazy">
+                <button class="audio-toggle" onclick="toggleAudio()" aria-label="Toggle prom music">Play Music</button>
+            </div>
+        </div>
+
+        <div class="grid-item grid-item-sidebyside">
+            <div class="grid-item">
+                <div class="narration-box">One year later… Working in my room, stressed with studies, juggling part-time jobs, and facing financial insecurities.</div>
+                <img src="assets/Uni.jpg" alt="Uni dorm room" loading="lazy">
             </div>
             <div class="grid-item" style="position: relative;">
-                <div class="narration-box narration-box-right">The Perfect Dance... where he held his partner, as they danced all night... as the song played on his phone... Press the button to embrace Maahir's dance</div>
-                <img src="assets/Prom.jpg" alt="A cartoon dance party." loading="lazy">
-                <button class="audio-toggle" onclick="toggleAudio()">Play Music</button>
+                <div class="narration-box">A call to my grandma brought relief—her voice a soothing balm amidst the chaos, thanks to staying connected.</div>
+                <img src="assets/grandmacall.jpg" alt="A call with grandma" loading="lazy">
             </div>
         </div>
 
         <div class="grid-item grid-item-full">
-            <div class="narration-box">The Final question...Finally the day comes, as he walks into the 2degrees building...for an interview...2degrees...his dream company, knowingly or unknowingly...it has been a huge part of his life...whether it be connecting with his loved ones or helping him cope with his emptiness, loneliness...Is he selected or not...</div>
-            <img src="assets/walkIntoCom.jpg" alt="A person walking into a 2degrees building." loading="lazy">
+            <div class="narration-box">1 year later ...Today’s the day—I step into the 2degrees building for my dream interview! It’s been my lifeline, keeping me close to loved ones and easing my loneliness. Will they say yes? I’m jittery, excited, and ready to leap into this new chapter with a grin!</div>
+            <img src="assets/walkIntoCom.jpg" alt="A person walking into a 2degrees office building" loading="lazy">
         </div>
     </div>
 
+    <footer>
+        © 2025 Maahir's Journey with 2degrees. All rights reserved.
+    </footer>
 
     <script>
         gsap.registerPlugin(ScrollTrigger);
 
-        // Animate the start page elements
-        gsap.fromTo('.start-title', { opacity: 0, y: 50 }, { opacity: 1, y: 0, duration: 1, delay: 0.5 });
-        gsap.to('.skyline', { opacity: 1, duration: 1, delay: 1 });
-        gsap.to('.scroll-down', { opacity: 1, duration: 1, delay: 1.5 });
+        gsap.fromTo('.start-title', { opacity: 0, y: 50 }, { opacity: 1, y: 0, duration: 1.5, ease: 'power3.out', delay: 0.5 });
+        gsap.to('.skyline', { opacity: 1, duration: 2, delay: 1 });
+        gsap.to('.scroll-down', { opacity: 1, duration: 1, delay: 2 });
 
-        // Make the scroll down clickable to smoothly scroll to the image grid
         document.querySelector('.scroll-down').addEventListener('click', () => {
-            gsap.to(window, { duration: 1, scrollTo: ".image-grid", ease: "power2.inOut" });
+            gsap.to(window, { duration: 1, scrollTo: '.image-grid', ease: 'power2.inOut' });
         });
 
-        // Animate each grid item and its narration box/content
         document.querySelectorAll('.grid-item').forEach(item => {
-            // Select narration box and content within this specific grid item
             const narrationBox = item.querySelector('.narration-box');
             const contentElements = item.querySelectorAll('.content');
 
-            // Animate narration box if it exists
             if (narrationBox) {
-                gsap.from(narrationBox, {
-                    opacity: 0,
-                    y: 30,
-                    duration: 0.6,
-                    scrollTrigger: {
-                        trigger: item,
-                        start: 'top 80%',
-                        end: 'bottom 20%',
-                        toggleActions: 'play none none reverse'
+                gsap.fromTo(narrationBox, 
+                    { opacity: 0, y: 50 },
+                    {
+                        opacity: 1,
+                        y: 0,
+                        duration: 0.6,
+                        ease: 'power2.out',
+                        scrollTrigger: {
+                            trigger: item,
+                            start: 'top 80%',
+                            end: 'bottom 20%',
+                            toggleActions: 'play none none reverse'
+                        }
                     }
-                });
+                );
                 gsap.from(narrationBox, {
                     scale: 0.8,
                     rotation: 5,
@@ -308,7 +364,6 @@
                 });
             }
 
-            // Animate content elements if they exist
             if (contentElements.length > 0) {
                 gsap.from(contentElements, {
                     opacity: 0,
@@ -335,48 +390,25 @@
                     }
                 });
             }
-
-            // Interactive code overlay for "Two Months Later"
-            const codeOverlay = item.querySelector('.code-overlay');
-            const interactiveArea = item.querySelector('.interactive-section');
-
-            if (interactiveArea && codeOverlay) {
-                interactiveArea.addEventListener('mouseenter', () => {
-                    gsap.to(codeOverlay, { opacity: 1, scale: 1, duration: 0.3, visibility: 'visible' });
-                });
-
-                interactiveArea.addEventListener('mouseleave', () => {
-                    gsap.to(codeOverlay, { opacity: 0, scale: 0.9, duration: 0.2, visibility: 'hidden' });
-                });
-            }
-
-            // Interactive skill list overlay for "Job Hunt Begins"
-            const skillListOverlay = item.querySelector('.skill-list-overlay');
-            const jobHuntSection = item.closest('.interactive-section'); // Target the correct section
-
-            if (jobHuntSection && skillListOverlay) {
-                jobHuntSection.addEventListener('mouseenter', () => {
-                    gsap.to(skillListOverlay, { opacity: 1, scale: 1, duration: 0.3, visibility: 'visible' });
-                });
-
-                jobHuntSection.addEventListener('mouseleave', () => {
-                    gsap.to(skillListOverlay, { opacity: 0, scale: 0.9, duration: 0.2, visibility: 'hidden' });
-                });
-            }
         });
 
         function toggleAudio() {
             const audio = document.getElementById('prom-music');
             const button = document.querySelector('.audio-toggle');
-            if (audio.paused) {
-                audio.play();
-                button.textContent = 'Pause Music';
-            } else {
-                audio.pause();
-                button.textContent = 'Play Music';
+            try {
+                if (audio.paused) {
+                    audio.play().catch(err => console.error('Audio play failed:', err));
+                    button.textContent = 'Pause Music';
+                    button.setAttribute('aria-label', 'Pause prom music');
+                } else {
+                    audio.pause();
+                    button.textContent = 'Play Music';
+                    button.setAttribute('aria-label', 'Play prom music');
+                }
+            } catch (err) {
+                console.error('Audio toggle error:', err);
             }
         }
     </script>
 </body>
-
 </html>
